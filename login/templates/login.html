@@ -1,0 +1,29 @@
+  {% extends "index.html" %}
+  {% block title %}Login{% endblock %}
+  {% block head %}
+    {{ super() }}
+  {% endblock %}
+
+  {% block content %} 
+  <body class="text-center"> 
+  <main class="form-signin">   
+    <form action="{{ url_for('login.login_user') }}" method="post">
+      <img class="mb-4" src="/static/python.svg" alt="" width="144" height="114">
+      <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+      <label for="inputEmail" class="visually-hidden">User name</label>
+      <input type="" id="inputEmail" class="form-control" placeholder="User name" required autofocus name="username">
+
+      <label for="inputPassword" class="visually-hidden">Password</label>
+      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required name="password">
+
+      <button class="w-100 btn btn-lg btn-primary" type="submit" ">Sign in</button>
+
+      {% if result %}
+          <div class="alert alert-danger" role="alert"> {{ result }}</div>
+      {% endif %}    
+      <p class="mt-5 mb-3 text-muted">&copy; {{year}}</p>
+    </form>
+  </main>
+  </body>
+  {% endblock %}
+</html>

@@ -8,8 +8,10 @@ app = Flask(__name__)
 
 
 # Registering Blueprints
+from cover.cover import cover
+app.register_blueprint(cover, url_prex="")
 from login.login import login
-app.register_blueprint(login, url_prefix="")
+app.register_blueprint(login, url_prefix="/login")
 from home.home import home
 app.register_blueprint(home, url_prefix="/home")
 
