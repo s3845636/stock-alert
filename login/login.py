@@ -1,5 +1,4 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-from google.cloud import datastore
 from google.cloud import firestore
 import datetime
 
@@ -14,7 +13,7 @@ db  = firestore.Client()
 @login.route("/")
 def login_user():
     now = datetime.datetime.now()
-    return render_template("index.html", year = now.year)
+    return render_template("login.html", year = now.year)
 
 
 
@@ -45,5 +44,5 @@ def login_post():
             result = "Your account is not found. Create an account, it's free (:"
 
 
-    return render_template("index.html", result = result)
+    return render_template("login.html", result = result)
 
