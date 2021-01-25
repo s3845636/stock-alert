@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.79.0">
-    <title>Stock Alert Tool</title>
+    <title>{% block title %}Stock Alert Tool{% endblock %}</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/cover/">
     <!-- Bootstrap core CSS -->
@@ -28,10 +28,9 @@
         }
       }
     </style>
-
+    {% endblock head %}
     <!-- Custom styles for this template -->
-    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
-    {% endblock %}
+    {% block style %} <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">{% endblock %}
   </head>
 
   {% block content %}

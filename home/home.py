@@ -10,24 +10,21 @@ home = Blueprint("home", __name__, static_folder="static", static_url_path="/sta
 
 
 #After successfully logged in. Have to use 'home' in stead 'main.py' is reserved for Datastore connection.
-@home.route("/", methods=['GET','POST'])
+@home.route("/")
 def home_user():
 
     full_name = ''
     # Get user id from the url
     url = request.args.get('id')
-
-    # # Retrieve data of an user with the id collected from the url
-    # key = datastore_client.key("user", url)
-    # full_name = datastore_client.get(key)['name']
-    
-    # # Direct to either change name or change password page
-    # if request.method == 'POST':
-    #     if request.form.get("submit_name"):
-    #         return redirect(url_for('name.name_user', id = url))
-    #     elif request.form.get("submit_password"):
-    #         return redirect(url_for('password.password_user', id = url))
-
-
     # return render_template("home.html", full_name = full_name, id = url)
+
+    #Sign out 
     return render_template("home.html", full_name = url.capitalize() )
+
+
+
+
+@home.route("/logout")
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('cover.cover_page'))

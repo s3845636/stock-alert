@@ -4,7 +4,7 @@ from google.cloud import firestore
 
 # initialising Flask app
 app = Flask(__name__)
-
+app.secret_key = "anyrandomstring"
 
 
 # Registering Blueprints
