@@ -4,26 +4,45 @@
     {{ super() }}
   {% endblock %}
 
-  {% block content %} 
+  {% block content %}
+  <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <header class="">
+      <div>
+      <h3 class="float-md-start mb-0 text-dark">Stock Insights</h3>
+        <nav class="nav nav-masthead justify-content-center float-md-end">
+          <a class="nav-link text-dark " aria-current="page" href="{{ url_for('cover.cover_page') }}">Home</a>
+          <a class="nav-link active" aria-current="page" href="{{ url_for('login.login_user') }}">Login</a>
+          <a class="nav-link text-dark" href="{{ url_for('signup.signup_user') }}">Sign up</a>
+        </nav>
+      </div>
+    </header>
+  
+
   <body class="text-center"> 
   <main class="form-signin">   
     <form action="{{ url_for('login.login_user') }}" method="post">
       <img class="mb-4" src="/static/python.svg" alt="" width="144" height="114">
       <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
       <label for="inputEmail" class="visually-hidden">User name</label>
-      <input type="" id="inputEmail" class="form-control" placeholder="User name" required autofocus name="username">
+      <input type="" id="inputEmail" class="form-control mb-2" placeholder="User name" required autofocus name="username">
 
       <label for="inputPassword" class="visually-hidden">Password</label>
-      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required name="password">
+      <input type="password" id="inputPassword" class="form-control  mb-2" placeholder="Password" required name="password">
 
       <button class="w-100 btn btn-lg btn-primary" type="submit" ">Sign in</button>
 
-      {% if result %}
-          <div class="alert alert-danger" role="alert"> {{ result }}</div>
-      {% endif %}    
+      {% if result == 'You have succesfully created a new account. Log in now.' %}
+          <div class="alert alert-success" role="alert"> {{ result }} </div>
+      {% elif result == 'The username or password you entered is incorrect.' %}
+          <div class="alert alert-danger" role="alert"> {{ result }} </div>
+      {% elif result == 'Your account is not found. Create an account, it is free (:' %}
+          <div class="alert alert-danger" role="alert"> {{ result }} </div>
+      {% endif %}   
+       
       <p class="mt-5 mb-3 text-muted">&copy; {{year}}</p>
     </form>
   </main>
   </body>
+  </div>
   {% endblock %}
 </html>

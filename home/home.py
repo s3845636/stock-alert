@@ -15,7 +15,7 @@ def home_user():
 
     full_name = ''
     # Get user id from the url
-    # url = request.args.get('id')
+    url = request.args.get('id')
 
     # # Retrieve data of an user with the id collected from the url
     # key = datastore_client.key("user", url)
@@ -30,4 +30,4 @@ def home_user():
 
 
     # return render_template("home.html", full_name = full_name, id = url)
-    return render_template("home.html", full_name = full_name)
+    return render_template("home.html", full_name = url.capitalize() )

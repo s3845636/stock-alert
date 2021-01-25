@@ -1,0 +1,58 @@
+{% extends "index.html" %}
+{% block title %}Register new account{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %} 
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <header class="">
+      <div>
+      <h3 class="float-md-start mb-0 text-dark">Stock Insights</h3>
+        <nav class="nav nav-masthead justify-content-center float-md-end">
+          <a class="nav-link text-dark" aria-current="page" href="{{ url_for('cover.cover_page') }}">Home</a>
+          <a class="nav-link text-dark" href="{{ url_for('login.login_user') }}">Login</a>
+          <a class="nav-link active" aria-current="page" href="{{ url_for('signup.signup_user') }}">Sign up</a>
+        </nav>
+      </div>
+    </header>
+
+<body class="text-center"> 
+<main class="form-signin">   
+  <form action="{{ url_for('signup.signup_post') }}" method="post" oninput='password2.setCustomValidity(password.value != password2.value ? "Passwords do not match." : "")'>
+    <img class="mb-4" src="/static/python.svg" alt="" width="144" height="114">
+    <h1 class="h3 mb-3 fw-normal">Please enter you details</h1>
+    <label for="inputUsername" class="visually-hidden">User name</label>
+    <input type="text" id="inputUsername" class="form-control mt-2" placeholder="User name" required autofocus name="username">
+
+    <label for="inputFullname" class="visually-hidden">Full name</label>
+    <input type="text" id="inputFullname" class="form-control mt-2" placeholder="Full name" required autofocus name="fullname">
+
+
+    <label for="inputEmail" class="visually-hidden">Email</label>
+    <input type="" id="inputEmail" class="form-control mt-2" placeholder="Email" required autofocus name="email">
+
+    <label for="inputPassword" class="visually-hidden">Password</label>
+    <input type="password" id="inputPassword" class="form-control mt-2 mb-0" placeholder="Password" required name="password" minlength="5" maxlength="20" >
+    <small id="passwordHelpInline" class="text-muted mt-0">
+        Your password must be 5-20 characters long
+    </small>
+
+    <label for="inputPassword2" class="visually-hidden">Re-enter password</label>
+    <input type="password" id="inputPassword2" class="form-control mt-2" placeholder="Re-enter password" required name="password2">
+
+    <label for="inputPhone" class="visually-hidden">Phone number</label>
+    <input type="tel" id="inputPhone" class="form-control mt-2" placeholder="Phone number" required autofocus name="phone" maxlength="10" size="10">
+
+    <button class="w-100 btn btn-lg btn-primary mt-2" type="submit" ">Resgister a new account</button>
+
+    {% if result %}
+        <div class="alert alert-danger" role="alert"> {{ result }}</div>
+    {% endif %}    
+    <p class="mt-5 mb-3 text-muted">&copy; {{year}}</p>
+  </form>
+</main>
+</body>
+</div>
+{% endblock %}
+</html>

@@ -14,7 +14,8 @@ from login.login import login
 app.register_blueprint(login, url_prefix="/login")
 from home.home import home
 app.register_blueprint(home, url_prefix="/home")
-
+from signup.signup import signup
+app.register_blueprint(signup, url_prefix='/signup')
 
 
 if __name__ == '__main__':
