@@ -26,7 +26,7 @@ def login_post():
 
 
     if request.method == 'POST':
-        input_id = request.form.get('username')
+        input_id = request.form.get('username').lower()
         input_password = request.form.get('password')
 
         # Read data from collection user and document from input_id
@@ -41,7 +41,7 @@ def login_post():
             else:
                 result = "The username or password you entered is incorrect."
         else:
-            result = "Your account is not found. Create an account, it's free (:"
+            result = "Your account is not found. Create an account, it is free (:"
 
 
     return render_template("login.html", result = result)
