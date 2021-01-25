@@ -13,6 +13,8 @@ db  = firestore.Client()
 @login.route("/")
 def login_user():
     now = datetime.datetime.now()
+    if 'username' in session:
+        return redirect(url_for('home.home_user', id = session['username']))
     return render_template("login.html", year = now.year)
 
 
@@ -37,6 +39,8 @@ def login_post():
 
         if user.exists:
             if user.to_dict()['password'] == input_password:
+                #assign session to the correct user
+                session['username'] = input_id
                 return redirect(url_for('home.home_user', id = user.id))
             else:
                 result = "The username or password you entered is incorrect."
