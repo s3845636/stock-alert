@@ -1,5 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session
-from google.cloud import datastore
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from google.cloud import firestore
 import datetime
 
@@ -10,19 +9,11 @@ login = Blueprint("login", __name__, static_folder="static", static_url_path="/s
 
 db  = firestore.Client()
 
-docs = db.collection(u'users')
-
 
 @login.route("/")
 def login_user():
     now = datetime.datetime.now()
-    a = []
-    # a = doc_ref.get()
-    # a = a.to_dict()
-
-    a = docs.where(u'name', u'==', u'Louis')
-    return render_template("index.html", year = a)
-    # return render_template("index.html", year = now.year)
+    return render_template("login.html", year = now.year)
 
 
 
@@ -30,44 +21,28 @@ def login_user():
 @login.route("/", methods=['POST','GET'])
 def login_post():
     result = ''
-    db_id = ''
-    db_password = ''
     input_id = ''
     input_password = ''
 
+
     if request.method == 'POST':
-        input_id = request.form.get('username')
+        input_id = request.form.get('username').lower()
         input_password = request.form.get('password')
 
-        # for doc in docs:
-        #     if doc.id == input_id:
-        #         return redirect(url_for('home.home_user', id = 'admin'))
-        #     else:
-        #         result = 'User Id or password is invalid!'
+        # Read data from collection user and document from input_id
+        # then check if the user if existed, if yes, compare password
+        doc_ref = db.collection(u'users').document(input_id)
+        user = doc_ref.get()
 
 
-        if input_id == 'admin' and input_password == 'admin':
-                return redirect(url_for('home.home_user', id = 'admin'))
+        if user.exists:
+            if user.to_dict()['password'] == input_password:
+                return redirect(url_for('home.home_user', id = user.id))
+            else:
+                result = "The username or password you entered is incorrect."
         else:
-            result = 'User Id or password is invalid!'
-            
-        
+            result = "Your account is not found. Create an account, it is free (:"
 
 
-        # result = fetch_users(input_id) 
-        # No match result from database
-        # if result == None:
-        #     result = 'User Id or password is invalid!'
-        # else:
-        #     db_id = result['id']
-        #     db_password = result['password']
-        #     # Comapre user id and password with the stored data in DataStore
-        #     if input_id == db_id and input_password == str(db_password):
-        #         result = "Success"
-        #         return redirect(url_for('home.home_user', id = db_id))
-        #     else:
-        #         result = 'User Id or password is invalid!'
-
-
-    return render_template("index.html", result = result)
+    return render_template("login.html", result = result)
 
