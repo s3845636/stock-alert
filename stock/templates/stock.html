@@ -111,7 +111,7 @@
                     </table>
                 
                     <h4 class="mt-5"><b>STOCK DAILY</b></h4>
-                    <table class="table table-striped table-sm">
+                    <table class="table table-striped table-sm table-hover">
                         <thead>
                             <tr>
                             <th class="text-muted">Date</th>
@@ -126,7 +126,7 @@
             
                         <tbody>
                             <tr>
-                              <td>{{ daily_prices['one_day_before_date'] }}</td>
+                              <td><strong>{{ daily_prices['one_day_before_date'] }}</strong></td>
                               <td>{{ daily_prices['one_day_before_open'] }}</td>
                               <td>{{ daily_prices['one_day_before_high'] }}</td>
                               <td>{{ daily_prices['one_day_before_low'] }}</td>
@@ -135,7 +135,7 @@
                               <td></td>
                             </tr>
                             <tr>
-                                <td>{{ daily_prices['two_day_before_date'] }}</td>
+                                <td><strong>{{ daily_prices['two_day_before_date'] }}</strong></td>
                                 <td>{{ daily_prices['two_day_before_open'] }}</td>
                                 <td>{{ daily_prices['two_day_before_high'] }}</td>
                                 <td>{{ daily_prices['two_day_before_low'] }}</td>
@@ -165,7 +165,7 @@
                               <h3 class="mb-0"> {{ daily_news['article_one_title'] }}</h3>
                               <div class="mb-1 text-muted">{{ daily_news['article_one_author'] }}</div>
                               <p class="card-text mb-auto">{{ daily_news['article_one_desc'] }}</p>
-                              <a href="{{ daily_news['article_one_url']  }}" class="stretched-link">Continue reading</a>
+                              <a href="{{ daily_news['article_one_url']  }}" class="stretched-link" target="_blank">Continue reading</a>
                             </div>
                           </div>
                         </div>
@@ -176,7 +176,7 @@
                               <h3 class="mb-0">{{ daily_news['article_two_title'] }}</h3>
                               <div class="mb-1 text-muted">{{ daily_news['article_two_author'] }}</div>
                               <p class="mb-auto">{{ daily_news['article_two_desc'] }}</p>
-                              <a href="{{ daily_news['article_two_url']  }}" class="stretched-link">Continue reading</a>
+                              <a href="{{ daily_news['article_two_url']  }}" class="stretched-link" target="_blank">Continue reading</a>
                             </div>
                           </div>
                         </div>
@@ -191,7 +191,7 @@
                               <h3 class="mb-0"> {{ daily_news['article_3_title'] }}</h3>
                               <div class="mb-1 text-muted">{{ daily_news['article_3_author'] }}</div>
                               <p class="card-text mb-auto">{{ daily_news['article_3_desc'] }}</p>
-                              <a href="{{ daily_news['article_3_url']  }}" class="stretched-link">Continue reading</a>
+                              <a href="{{ daily_news['article_3_url']  }}" class="stretched-link" target="_blank">Continue reading</a>
                             </div>
                           </div>
                         </div>
@@ -202,7 +202,7 @@
                               <h3 class="mb-0">{{ daily_news['article_4_title'] }}</h3>
                               <div class="mb-1 text-muted">{{ daily_news['article_4_author'] }}</div>
                               <p class="mb-auto">{{ daily_news['article_4_desc'] }}</p>
-                              <a href="{{ daily_news['article_4_url']  }}" class="stretched-link">Continue reading</a>
+                              <a href="{{ daily_news['article_4_url']  }}" class="stretched-link" target="_blank">Continue reading</a>
                             </div>
                           </div>
                         </div>

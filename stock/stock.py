@@ -16,7 +16,7 @@ STOCK_ENDPOINT = 'https://www.alphavantage.co/query'
 
 #TWILIO API
 TWILIO_SID = 'AC45e1082f71adf4be8c4aa873e6ada7a4'
-AUTH_TOKEN = '9e145904074a7c7452326c75bccbe5c7'
+AUTH_TOKEN = 'e4d4f1ccc590bd61ac8cf84a27c26c28'
 client = Client(TWILIO_SID, AUTH_TOKEN)
 
 db = firestore.Client()
