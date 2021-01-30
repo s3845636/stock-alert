@@ -1,9 +1,11 @@
 {% extends "index.html" %}
-{% block title %}Register new account{% endblock %}
+{% block title %}Stock Dashboard{% endblock %}
 {% block head %}
   {{ super() }}
 {% endblock %}
+
 {% block style %}<link href="{{ url_for('static', filename='dashboard.css') }}" rel="stylesheet">{% endblock %}
+
 {% block content %} 
 <body>
     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
@@ -11,7 +13,13 @@
       <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+
+      {% block search %} 
+      <form class="w-100" action="{{ url_for('stock.stock_data', id = url, type = 'search') }}" method="post">
+        <input class=" w-100 form-control form-control-dark" name="search" type="text" placeholder="Search" aria-label="Search">
+      </form>
+      {% endblock %}
+
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
           <a class="nav-link" href="{{ url_for('home.logout') }}" >Sign out</a>
@@ -40,13 +48,14 @@
         </div>
 
         <!-- SIDE BAR -->
+        {% block sidebar %}
         <div class="container-fluid">
             <div class="row">
               <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
                 <div class="position-sticky pt-3">
                   <ul class="nav flex-column">
                     <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="">
+                      <a class="nav-link active" aria-current="page" href="{{ url_for('login.login_user') }}">
                         <span data-feather="home"></span>
                         <b>DASHBOARD</b>
                       </a>
@@ -63,30 +72,32 @@
                   <ul class="nav flex-column mb-2">
                     {% for stock in stock_list %}
                     <li class="nav-item">
-                      <a class="nav-link" href="{{ url_for('home.show', stock = stock['code']) }}">
+                      <a class="nav-link" href="{{ url_for('stock.stock_data', id = url, search=stock['code']) }}">
                         <span data-feather="file-text"></span>
                         {{ stock['name'] }}
                       </a>
                     {% endfor %}
                   </ul>
                   {% endif %}
-
+                  
                 </div>
               </nav>
-    
+        {% endblock %}
           <!-- <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> -->
-          
+ 
+        <h4 class="mt-5 text-center text-muted">Search for your new stock in the search bar</h4>
 
         <!-- TABLE FOR DATA STOCKS  -->
         {% if stock_list %}
-        <h4><b>SELECTED STOCKS</b></h4>
-        <div class="table-responsive">
+        <h4 class="mt-5"><b>SELECTED STOCKS</b></h4>
+        <div class="table-responsive mt-2">
             <table class="table table-striped table-sm">
             <thead>
                 <tr>
                 <th class="text-muted">Code</th>
                 <th class="text-muted">Name</th>
                 <th class="text-muted">Sector</th>
+                <th class="text-muted">Performance</th>
                 </tr>
             </thead>
 
@@ -96,6 +107,7 @@
                   <td>{{ stock['code'] }}</td>
                   <td>{{ stock['name'] }}</td>
                   <td>{{ stock['sector'] }}</td>
+                  <td>{{ stock['performance'] }}</td>
                 </tr>
             </tbody>
             {% endfor %}
@@ -106,12 +118,3 @@
     {% endblock %}
 </html>
 
-
-
-<!-- <body class="text-center">
-    <main class="form-signin"> 
-        <img class="mb-4" src="/static/face.png" alt="" width="150" height="150">
-        <h1 style="font-weight: 600!important;" class="h3 mb-3 fw-normal">Hello, {{full_name}} ! </h1>
-
-    </main>     
-</body> -->
