@@ -154,6 +154,59 @@
                               </tr>
                         </tbody>
                     </table>
+
+
+                    <h4 class="mt-5"><b>DAILY NEWS</b></h4>
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                          <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                            <div class="col p-4 d-flex flex-column position-static">
+                              <strong class="d-inline-block mb-2 text-primary">World</strong>
+                              <h3 class="mb-0"> {{ daily_news['article_one_title'] }}</h3>
+                              <div class="mb-1 text-muted">{{ daily_news['article_one_author'] }}</div>
+                              <p class="card-text mb-auto">{{ daily_news['article_one_desc'] }}</p>
+                              <a href="{{ daily_news['article_one_url']  }}" class="stretched-link">Continue reading</a>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                            <div class="col p-4 d-flex flex-column position-static">
+                              <strong class="d-inline-block mb-2 text-success">World</strong>
+                              <h3 class="mb-0">{{ daily_news['article_two_title'] }}</h3>
+                              <div class="mb-1 text-muted">{{ daily_news['article_two_author'] }}</div>
+                              <p class="mb-auto">{{ daily_news['article_two_desc'] }}</p>
+                              <a href="{{ daily_news['article_two_url']  }}" class="stretched-link">Continue reading</a>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                          <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                            <div class="col p-4 d-flex flex-column position-static">
+                              <strong class="d-inline-block mb-2 text-primary">World</strong>
+                              <h3 class="mb-0"> {{ daily_news['article_3_title'] }}</h3>
+                              <div class="mb-1 text-muted">{{ daily_news['article_3_author'] }}</div>
+                              <p class="card-text mb-auto">{{ daily_news['article_3_desc'] }}</p>
+                              <a href="{{ daily_news['article_3_url']  }}" class="stretched-link">Continue reading</a>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                            <div class="col p-4 d-flex flex-column position-static">
+                              <strong class="d-inline-block mb-2 text-success">World</strong>
+                              <h3 class="mb-0">{{ daily_news['article_4_title'] }}</h3>
+                              <div class="mb-1 text-muted">{{ daily_news['article_4_author'] }}</div>
+                              <p class="mb-auto">{{ daily_news['article_4_desc'] }}</p>
+                              <a href="{{ daily_news['article_4_url']  }}" class="stretched-link">Continue reading</a>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
                     
     {% endblock %}
     </body>     

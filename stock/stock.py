@@ -83,9 +83,6 @@ def stock_data():
     response_daily = requests.get(STOCK_ENDPOINT, params=stock_data_daily)
     data_daily = response_daily.json()["Time Series (Daily)"]
     
-    # Date from API
-    # one_day_before_date = data_daily[0]
-    # two_day_before_date = data_daily[1]
 
     data_list = [value for (key, value) in data_daily.items()]
     # Closing price of yesterday price
@@ -126,8 +123,40 @@ def stock_data():
         'performance' : performance
     }
 
-    print(performance)
-    return render_template("stock.html", daily_prices = daily_prices_dict, name=stock_name, symbol=stock_symbol, desc=stock_desc, exchange=stock_exchange, country=stock_country, sector=stock_sector, saved=saved, url = url)
+
+
+    # /v2/top-headlines
+    all_articles = newsapi.get_everything(q=stock_name,
+                                      language='en',
+                                      sort_by='relevancy',
+                                      page=2)
+
+
+
+    daily_news_dict = { \
+        "article_one_title" : all_articles['articles'][0]['title'],
+        "article_one_author" : all_articles['articles'][0]['author'],
+        "article_one_desc" : all_articles['articles'][0]['description'],
+        "article_one_url" : all_articles['articles'][0]['url'],
+        "article_one_date" : all_articles['articles'][0]['publishedAt'].split('T')[0],
+        "article_two_title" : all_articles['articles'][1]['title'],
+        "article_two_author" : all_articles['articles'][1]['author'],
+        "article_two_desc" : all_articles['articles'][1]['description'],
+        "article_two_url" : all_articles['articles'][1]['url'],
+        "article_two_date" : all_articles['articles'][1]['publishedAt'].split('T')[0],
+        "article_3_title" : all_articles['articles'][2]['title'],
+        "article_3_author" : all_articles['articles'][2]['author'],
+        "article_3_desc" : all_articles['articles'][2]['description'],
+        "article_3_url" : all_articles['articles'][2]['url'],
+        "article_3_date" : all_articles['articles'][2]['publishedAt'].split('T')[0],
+        "article_4_title" : all_articles['articles'][3]['title'],
+        "article_4_author" : all_articles['articles'][3]['author'],
+        "article_4_desc" : all_articles['articles'][3]['description'],
+        "article_4_url" : all_articles['articles'][3]['url'],
+        "article_4_date" : all_articles['articles'][3]['publishedAt'].split('T')[0]     
+    }
+    print(all_articles['articles'][0]['publishedAt'].split('T')[0])
+    return render_template("stock.html", daily_news = daily_news_dict, daily_prices = daily_prices_dict, name=stock_name, symbol=stock_symbol, desc=stock_desc, exchange=stock_exchange, country=stock_country, sector=stock_sector, saved=saved, url = url)
 
 
 
