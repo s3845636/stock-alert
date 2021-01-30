@@ -4,6 +4,7 @@ from newsapi import NewsApiClient
 import json
 import requests
 from datetime import datetime, timedelta
+from twilio.rest import Client
 
 
 #API TOKEN
@@ -13,8 +14,13 @@ NEWSAPI_KEY = '4be2b00fc468417f983a710b30edd6ce'
 ALPHA_VANTAGE_KEY = 'NL3IT30P23YWL055' 
 STOCK_ENDPOINT = 'https://www.alphavantage.co/query'
 
+#TWILIO API
+TWILIO_SID = 'AC45e1082f71adf4be8c4aa873e6ada7a4'
+AUTH_TOKEN = '9e145904074a7c7452326c75bccbe5c7'
+client = Client(TWILIO_SID, AUTH_TOKEN)
 
 db = firestore.Client()
+
 
 
 stock = Blueprint("stock", __name__, static_folder="static", static_url_path="/static", template_folder="templates")
@@ -101,9 +107,9 @@ def stock_data():
     difference_percent = (difference/float(one_day_before_close)) * 100
 
     if difference < 0:
-        performance = "🔴"
+        performance = "🔻"
     elif difference > 0:
-        performance = "🟢"
+        performance = "🔺"
     else:
         performance = "🟠"
 
@@ -156,7 +162,34 @@ def stock_data():
         "article_4_date" : all_articles['articles'][3]['publishedAt'].split('T')[0]     
     }
     print(all_articles['articles'][0]['publishedAt'].split('T')[0])
+
+
+
+    # Get user phone number from database
+    #  Read data from collection user and document from input_id
+
+    users = db.collection(u'users').document(url)
+    user = users.get()
+    phone = user.to_dict()['phone']
+
+    if difference_percent > 5 or difference_percent < -5 :
+        message = client.messages \
+                        .create(
+                            body=f"{search_stock}: {performance}{round(float(difference_percent), 1)}% \nHeadline: {all_articles['articles'][0]['title']}. \nBrief: {all_articles['articles'][0]['description']}",
+                            from_='+13393092400',
+                            to= f'+61{phone}'
+                    )
+
+        print(message.sid)
+
     return render_template("stock.html", daily_news = daily_news_dict, daily_prices = daily_prices_dict, name=stock_name, symbol=stock_symbol, desc=stock_desc, exchange=stock_exchange, country=stock_country, sector=stock_sector, saved=saved, url = url)
+
+
+
+
+
+
+
 
 
 
