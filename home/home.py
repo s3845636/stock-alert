@@ -84,36 +84,3 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('cover.cover_page'))
 
-
-# @home.route("/stocks")
-# def show():
-
-#     # Stock data from Alpha API DAILY
-#     stock_data = {
-#         "function": "TIME_SERIES_DAILY",
-#         "symbol": "IBM",
-#         "apikey": ALPHA_VANTAGE_KEY
-#     }
-
-#     response = requests.get(STOCK_ENDPOINT, params=stock_data)
-#     data = response.json()["Time Series (Daily)"]
-
-
-#     data_list = [value for (key, value) in data.items()]
-#     # Closing price of yesterday price
-#     one_day_before_price = data_list[0]["4. close"]
-#     # Closing price of the day before yesterday
-#     two_day_before_price = data_list[1]["4. close"]
-
-#     difference = abs(float(one_day_before_price) - float(two_day_before_price))
-#     difference_percent = (difference/float(one_day_before_price)) * 100
-
-
-#      # /v2/top-headlines
-#     top_headlines = newsapi.get_top_headlines(q='apple', country='us')
-
-
-
-#     stock = request.args.get('stock') 
-
-#     return render_template("home.html", stock = stock)
