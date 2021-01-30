@@ -16,6 +16,8 @@ from home.home import home
 app.register_blueprint(home, url_prefix="/home")
 from signup.signup import signup
 app.register_blueprint(signup, url_prefix='/signup')
+from stock.stock import stock
+app.register_blueprint(stock, url_prefix='/stock')
 
 
 if __name__ == '__main__':
