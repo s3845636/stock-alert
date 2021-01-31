@@ -5,6 +5,7 @@ import json
 import requests
 from datetime import datetime, timedelta
 from twilio.rest import Client
+from twilio.base.exceptions import TwilioRestException
 
 
 #API TOKEN
@@ -74,7 +75,6 @@ def stock_data():
 
         # Check if stock existed in database 
         if stock.exists:
-            print("Exisited")
             saved = True      
     else:
         data = None
@@ -87,50 +87,66 @@ def stock_data():
     }
 
     response_daily = requests.get(STOCK_ENDPOINT, params=stock_data_daily)
-    data_daily = response_daily.json()["Time Series (Daily)"]
-    
+    print(response_daily.json())
 
-    data_list = [value for (key, value) in data_daily.items()]
-    # Closing price of yesterday price
-    one_day_before_open = data_list[0]["1. open"]
-    one_day_before_high = data_list[0]["2. high"]
-    one_day_before_low = data_list[0]["3. low"]
-    one_day_before_close = data_list[0]["4. close"]
-    # Closing price of the day before yesterday
-    two_day_before_open = data_list[1]["1. open"]
-    two_day_before_high = data_list[1]["2. high"]
-    two_day_before_low = data_list[1]["3. low"]
-    two_day_before_close = data_list[1]["4. close"]
-    # Calculate the difference
 
-    difference = float(one_day_before_close) - float(two_day_before_close)
-    difference_percent = (difference/float(one_day_before_close)) * 100
+    # Check if response_daily dict empty
+    if len(response_daily.json()) > 0:
+        data_daily = response_daily.json()["Time Series (Daily)"]
 
-    if difference < 0:
-        performance = "🔻"
-    elif difference > 0:
-        performance = "🔺"
+        data_list = [value for (key, value) in data_daily.items()]
+        # Prices of yesterday price
+        one_day_before_open = data_list[0]["1. open"]
+        one_day_before_high = data_list[0]["2. high"]
+        one_day_before_low = data_list[0]["3. low"]
+        one_day_before_close = data_list[0]["4. close"]
+        # Prices of the day before yesterday
+        two_day_before_open = data_list[1]["1. open"]
+        two_day_before_high = data_list[1]["2. high"]
+        two_day_before_low = data_list[1]["3. low"]
+        two_day_before_close = data_list[1]["4. close"]
+         # Prices of the 2 days before yesterday
+        three_day_before_open = data_list[2]["1. open"]
+        three_day_before_high = data_list[2]["2. high"]
+        three_day_before_low = data_list[2]["3. low"]
+        three_day_before_close = data_list[2]["4. close"]
+        # Calculate the difference
+        difference = float(one_day_before_close) - float(two_day_before_close)
+        difference_percent = (difference/float(one_day_before_close)) * 100
+
+        if difference < 0:
+            performance = "🔴"
+        elif difference > 0:
+            performance = "🟢"
+        else:
+            performance = "🟠"
+
+        daily_prices_dict = { \
+            "one_day_before_date" : (datetime.now() - timedelta(1)).strftime('%d-%m-%Y'),
+            'one_day_before_open' : round(float(one_day_before_open), 2),
+            'one_day_before_high' : round(float(one_day_before_high), 2),
+            'one_day_before_low' : round(float(one_day_before_low), 2),
+            'one_day_before_close' : round(float(one_day_before_close), 2),
+            'two_day_before_date' : (datetime.now() - timedelta(2)).strftime('%d-%m-%Y'),
+            'two_day_before_open' : round(float(two_day_before_open), 2),
+            'two_day_before_high' : round(float(two_day_before_high), 2),
+            'two_day_before_low' : round(float(two_day_before_low), 2),
+            'two_day_before_close' : round(float(two_day_before_close), 2),
+            'three_day_before_date' : (datetime.now() - timedelta(3)).strftime('%d-%m-%Y'),
+            'three_day_before_open' : round(float(three_day_before_open), 2),
+            'three_day_before_high' : round(float(three_day_before_high), 2),
+            'three_day_before_low' : round(float(three_day_before_low), 2),
+            'three_day_before_close' : round(float(three_day_before_close), 2),
+            'difference' : round(float(difference), 2),
+            'difference_percent' : round(float(difference_percent), 2),
+            'performance' : performance
+        }
     else:
-        performance = "🟠"
-
-    daily_prices_dict = { \
-        "one_day_before_date" : (datetime.now() - timedelta(1)).strftime('%d-%m-%Y'),
-        'one_day_before_open' : round(float(one_day_before_open), 2),
-        'one_day_before_high' : round(float(one_day_before_high), 2),
-        'one_day_before_low' : round(float(one_day_before_low), 2),
-        'one_day_before_close' : round(float(one_day_before_close), 2),
-        'two_day_before_date' : (datetime.now() - timedelta(2)).strftime('%d-%m-%Y'),
-        'two_day_before_open' : round(float(two_day_before_open), 2),
-        'two_day_before_high' : round(float(two_day_before_high), 2),
-        'two_day_before_low' : round(float(two_day_before_low), 2),
-        'two_day_before_close' : round(float(two_day_before_close), 2),
-        'difference' : round(float(difference), 2),
-        'difference_percent' : round(float(difference_percent), 2),
-        'performance' : performance
-    }
+        print('error')
+        data_daily = {}
 
 
-
+    print(type(daily_prices_dict['one_day_before_open']))
     # /v2/top-headlines
     all_articles = newsapi.get_everything(q=stock_name,
                                       language='en',
@@ -138,30 +154,33 @@ def stock_data():
                                       page=2)
 
 
+    if len(all_articles['articles']) > 0:
+        daily_news_dict = { \
+            "article_one_title" : all_articles['articles'][0]['title'],
+            "article_one_author" : all_articles['articles'][0]['author'],
+            "article_one_desc" : all_articles['articles'][0]['description'],
+            "article_one_url" : all_articles['articles'][0]['url'],
+            "article_one_date" : all_articles['articles'][0]['publishedAt'].split('T')[0],
+            "article_two_title" : all_articles['articles'][1]['title'],
+            "article_two_author" : all_articles['articles'][1]['author'],
+            "article_two_desc" : all_articles['articles'][1]['description'],
+            "article_two_url" : all_articles['articles'][1]['url'],
+            "article_two_date" : all_articles['articles'][1]['publishedAt'].split('T')[0],
+            "article_3_title" : all_articles['articles'][2]['title'],
+            "article_3_author" : all_articles['articles'][2]['author'],
+            "article_3_desc" : all_articles['articles'][2]['description'],
+            "article_3_url" : all_articles['articles'][2]['url'],
+            "article_3_date" : all_articles['articles'][2]['publishedAt'].split('T')[0],
+            "article_4_title" : all_articles['articles'][3]['title'],
+            "article_4_author" : all_articles['articles'][3]['author'],
+            "article_4_desc" : all_articles['articles'][3]['description'],
+            "article_4_url" : all_articles['articles'][3]['url'],
+            "article_4_date" : all_articles['articles'][3]['publishedAt'].split('T')[0]     
+        }
+    else:
+        daily_news_dict = {}
 
-    daily_news_dict = { \
-        "article_one_title" : all_articles['articles'][0]['title'],
-        "article_one_author" : all_articles['articles'][0]['author'],
-        "article_one_desc" : all_articles['articles'][0]['description'],
-        "article_one_url" : all_articles['articles'][0]['url'],
-        "article_one_date" : all_articles['articles'][0]['publishedAt'].split('T')[0],
-        "article_two_title" : all_articles['articles'][1]['title'],
-        "article_two_author" : all_articles['articles'][1]['author'],
-        "article_two_desc" : all_articles['articles'][1]['description'],
-        "article_two_url" : all_articles['articles'][1]['url'],
-        "article_two_date" : all_articles['articles'][1]['publishedAt'].split('T')[0],
-        "article_3_title" : all_articles['articles'][2]['title'],
-        "article_3_author" : all_articles['articles'][2]['author'],
-        "article_3_desc" : all_articles['articles'][2]['description'],
-        "article_3_url" : all_articles['articles'][2]['url'],
-        "article_3_date" : all_articles['articles'][2]['publishedAt'].split('T')[0],
-        "article_4_title" : all_articles['articles'][3]['title'],
-        "article_4_author" : all_articles['articles'][3]['author'],
-        "article_4_desc" : all_articles['articles'][3]['description'],
-        "article_4_url" : all_articles['articles'][3]['url'],
-        "article_4_date" : all_articles['articles'][3]['publishedAt'].split('T')[0]     
-    }
-    print(all_articles['articles'][0]['publishedAt'].split('T')[0])
+    # print(all_articles)
 
 
 
@@ -179,8 +198,11 @@ def stock_data():
                             from_='+13393092400',
                             to= f'+61{phone}'
                     )
-
-        print(message.sid)
+        try:
+            print(message.sid)
+        except TwilioRestException as e:
+            print(e)
+            return e.code
 
     return render_template("stock.html", daily_news = daily_news_dict, daily_prices = daily_prices_dict, name=stock_name, symbol=stock_symbol, desc=stock_desc, exchange=stock_exchange, country=stock_country, sector=stock_sector, saved=saved, url = url)
 
