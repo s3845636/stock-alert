@@ -45,32 +45,32 @@ def home_user():
             stock_list.append(stock_name)
             
             #  Stock data from Alpha API DAILY
-            stock_data = {
-                "function": "TIME_SERIES_DAILY",
-                "symbol": stock_name['code'],
-                "apikey": ALPHA_VANTAGE_KEY
-            }
+            # stock_data = {
+            #     "function": "TIME_SERIES_DAILY",
+            #     "symbol": stock_name['code'],
+            #     "apikey": ALPHA_VANTAGE_KEY
+            # }
 
-            response = requests.get(STOCK_ENDPOINT, params=stock_data)
-            data = response.json()["Time Series (Daily)"]
+            # response = requests.get(STOCK_ENDPOINT, params=stock_data)
+            # data = response.json()["Time Series (Daily)"]
 
-            data_list = [value for (key, value) in data.items()]
-            # Closing price of yesterday price
-            one_day_before_price = data_list[0]["4. close"]
-            # Closing price of the day before yesterday
-            two_day_before_price = data_list[1]["4. close"]
-            # Calculate the difference
-            difference = float(one_day_before_price) - float(two_day_before_price)
+            # data_list = [value for (key, value) in data.items()]
+            # # Closing price of yesterday price
+            # one_day_before_price = data_list[0]["4. close"]
+            # # Closing price of the day before yesterday
+            # two_day_before_price = data_list[1]["4. close"]
+            # # Calculate the difference
+            # difference = float(one_day_before_price) - float(two_day_before_price)
 
-            if difference < 0:
-                performance = "🔴"
-            elif difference > 0:
-                performance = "🟢"
-            else:
-                performance = "🟠"
+            # if difference < 0:
+            #     performance = "🔴"
+            # elif difference > 0:
+            #     performance = "🟢"
+            # else:
+            #     performance = "🟠"
 
-            # stock_name.append({'performance' : performance})
-            stock_name['performance'] = performance
+            # # stock_name.append({'performance' : performance})
+            # stock_name['performance'] = performance
             
             
         print(stock_list)

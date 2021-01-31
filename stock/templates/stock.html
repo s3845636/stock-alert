@@ -7,6 +7,49 @@
 {% block style %}<link href="{{ url_for('static', filename='dashboard.css') }}" rel="stylesheet">{% endblock %}
 
 {% block content %} 
+<head>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    
+function drawChart() {
+  var low = '{{ daily_prices['one_day_before_low']|int }}' ;
+  var open = '{{ daily_prices['one_day_before_open']|int }}';
+  var close = '{{ daily_prices['one_day_before_close']|int }}';
+  var high = '{{ daily_prices['one_day_before_high']|int }}';
+
+
+
+
+  var data = google.visualization.arrayToDataTable([
+    ['Yesterday', parseInt(low), parseInt(open), parseInt(close), parseInt(high)],
+    ['{{ daily_prices['two_day_before_date'] }}', '{{ daily_prices['two_day_before_low']|int }}', '{{ daily_prices['two_day_before_open']|int }}', '{{ daily_prices['two_day_before_close']|int }}', '{{ daily_prices['two_day_before_high']|int }}'],
+    ['{{ daily_prices['three_day_before_date'] }}', '{{ daily_prices['three_day_before_low']|int }}', '{{ daily_prices['three_day_before_open']|int }}', '{{ daily_prices['three_day_before_close']|int }}', '{{ daily_prices['three_day_before_high']|int }}'],
+  ], true);
+
+  var options = {
+    legend:'none',
+    candlestick: {
+            fallingColor: { strokeWidth: 0, fill: '#a52714' }, // red
+            risingColor: { strokeWidth: 0, fill: '#0f9d58' }   // green
+          },
+    hAxis: { 
+      gridlines: { 
+        count: 2,
+        interval: [20,40,50,80] 
+      } 
+    }
+  };
+
+  var chart = new google.visualization.CandlestickChart(document.getElementById('chart_div'));
+
+  chart.draw(data, options);
+}
+  </script>
+</head>
+
 <body>
     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
       <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Stock Insights</a>
@@ -77,6 +120,11 @@
               <h4 class="mt-5 text-center text-muted">We cannot find your stock, please try another stock code</h4>
               {% endif %}
 
+            
+              <!-- An interactive candlestick chart. -->
+              
+            <div id="chart_div" class="container-fluid w-100" style="width: 900px; height: 500px;"></div>
+               
 
             <h4 class="mt-5"><b>STOCK OVERVIEW</b></h4>
                 <div class="table-responsive mt-2">
@@ -155,59 +203,61 @@
                         </tbody>
                     </table>
 
+                    {% if daily_news %}
+                      <h4 class="mt-5"><b>DAILY NEWS</b></h4>
+                      <div class="row mb-2">
+                          <div class="col-md-6">
+                            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                              <div class="col p-4 d-flex flex-column position-static">
+                                <strong class="d-inline-block mb-2 text-primary">World</strong>
+                                <h3 class="mb-0"> {{ daily_news['article_one_title'] }}</h3>
+                                <div class="mb-1 text-muted">{{ daily_news['article_one_author'] }}</div>
+                                <p class="card-text mb-auto">{{ daily_news['article_one_desc'] }}</p>
+                                <a href="{{ daily_news['article_one_url']  }}" class="stretched-link" target="_blank">Continue reading</a>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                              <div class="col p-4 d-flex flex-column position-static">
+                                <strong class="d-inline-block mb-2 text-success">World</strong>
+                                <h3 class="mb-0">{{ daily_news['article_two_title'] }}</h3>
+                                <div class="mb-1 text-muted">{{ daily_news['article_two_author'] }}</div>
+                                <p class="mb-auto">{{ daily_news['article_two_desc'] }}</p>
+                                <a href="{{ daily_news['article_two_url']  }}" class="stretched-link" target="_blank">Continue reading</a>
+                              </div>
+                            </div>
+                          </div>
+                      </div>
 
-                    <h4 class="mt-5"><b>DAILY NEWS</b></h4>
-                    <div class="row mb-2">
-                        <div class="col-md-6">
-                          <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                            <div class="col p-4 d-flex flex-column position-static">
-                              <strong class="d-inline-block mb-2 text-primary">World</strong>
-                              <h3 class="mb-0"> {{ daily_news['article_one_title'] }}</h3>
-                              <div class="mb-1 text-muted">{{ daily_news['article_one_author'] }}</div>
-                              <p class="card-text mb-auto">{{ daily_news['article_one_desc'] }}</p>
-                              <a href="{{ daily_news['article_one_url']  }}" class="stretched-link" target="_blank">Continue reading</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                            <div class="col p-4 d-flex flex-column position-static">
-                              <strong class="d-inline-block mb-2 text-success">World</strong>
-                              <h3 class="mb-0">{{ daily_news['article_two_title'] }}</h3>
-                              <div class="mb-1 text-muted">{{ daily_news['article_two_author'] }}</div>
-                              <p class="mb-auto">{{ daily_news['article_two_desc'] }}</p>
-                              <a href="{{ daily_news['article_two_url']  }}" class="stretched-link" target="_blank">Continue reading</a>
-                            </div>
-                          </div>
-                        </div>
-                    </div>
 
-
-                    <div class="row mb-2">
-                        <div class="col-md-6">
-                          <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                            <div class="col p-4 d-flex flex-column position-static">
-                              <strong class="d-inline-block mb-2 text-primary">World</strong>
-                              <h3 class="mb-0"> {{ daily_news['article_3_title'] }}</h3>
-                              <div class="mb-1 text-muted">{{ daily_news['article_3_author'] }}</div>
-                              <p class="card-text mb-auto">{{ daily_news['article_3_desc'] }}</p>
-                              <a href="{{ daily_news['article_3_url']  }}" class="stretched-link" target="_blank">Continue reading</a>
+                      <div class="row mb-2">
+                          <div class="col-md-6">
+                            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                              <div class="col p-4 d-flex flex-column position-static">
+                                <strong class="d-inline-block mb-2 text-primary">World</strong>
+                                <h3 class="mb-0"> {{ daily_news['article_3_title'] }}</h3>
+                                <div class="mb-1 text-muted">{{ daily_news['article_3_author'] }}</div>
+                                <p class="card-text mb-auto">{{ daily_news['article_3_desc'] }}</p>
+                                <a href="{{ daily_news['article_3_url']  }}" class="stretched-link" target="_blank">Continue reading</a>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                            <div class="col p-4 d-flex flex-column position-static">
-                              <strong class="d-inline-block mb-2 text-success">World</strong>
-                              <h3 class="mb-0">{{ daily_news['article_4_title'] }}</h3>
-                              <div class="mb-1 text-muted">{{ daily_news['article_4_author'] }}</div>
-                              <p class="mb-auto">{{ daily_news['article_4_desc'] }}</p>
-                              <a href="{{ daily_news['article_4_url']  }}" class="stretched-link" target="_blank">Continue reading</a>
+                          <div class="col-md-6">
+                            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                              <div class="col p-4 d-flex flex-column position-static">
+                                <strong class="d-inline-block mb-2 text-success">World</strong>
+                                <h3 class="mb-0">{{ daily_news['article_4_title'] }}</h3>
+                                <div class="mb-1 text-muted">{{ daily_news['article_4_author'] }}</div>
+                                <p class="mb-auto">{{ daily_news['article_4_desc'] }}</p>
+                                <a href="{{ daily_news['article_4_url']  }}" class="stretched-link" target="_blank">Continue reading</a>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                    </div>
-                    
+                      </div>
+                    {% else %}
+                      <h4 class="mt-5"><b>THERE IS NO NEWS REGARDING THIS STOCK</b></h4>
+                    {% endif %}
     {% endblock %}
     </body>     
 </html>
